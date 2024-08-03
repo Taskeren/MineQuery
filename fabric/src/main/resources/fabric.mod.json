@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "minequery",
+  "version": "${version}",
+  "name": "MineQuery",
+  "description": "TODO!",
+  "authors": [
+    "Taskeren"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Taskeren/MineQuery",
+    "sources": "https://github.com/Taskeren/MineQuery",
+    "issues": "https://github.com/Taskeren/MineQuery/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/minequery/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "cn.taskeren.minequery.fabric.MineQueryFabric"
+    ],
+    "modmenu": [
+      "cn.taskeren.minequery.fabric.MineQueryConfigModMenu"
+    ]
+  },
+  "mixins": [
+    "minequery.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21",
+    "java": ">=21",
+    "architectury": ">=13.0.2",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/XbrutfquuE"
+      }
+    }
+  }
+}

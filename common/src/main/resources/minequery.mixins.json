@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "cn.taskeren.minequery.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+    "ClientPlayerInteractionManagerMixin",
+    "AbstractBlockAccessor"
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
