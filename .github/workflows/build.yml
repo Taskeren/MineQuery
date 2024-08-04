@@ -16,8 +16,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
       - name: Build
-        uses: gradle/gradle-build-action@v2
+        run: ./gradlew build
       - name: Get Version
         id: var
         run: |
