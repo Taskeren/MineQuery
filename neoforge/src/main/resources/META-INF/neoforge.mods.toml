@@ -34,5 +34,12 @@ versionRange = "[13.0.2,)"
 ordering = "AFTER"
 side = "BOTH"
 
+[[dependencies.minequery]]
+modId = "midnightlib"
+mandatory = true
+versionRange = "*"
+ordering = "NONE"
+side = "CLIENT"
+
 [[mixins]]
 config = "minequery.mixins.json"
