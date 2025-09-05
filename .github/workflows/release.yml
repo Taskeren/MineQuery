@@ -50,15 +50,16 @@ jobs:
           # curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            fabric/build/libs/*.jar
-            neoforge/build/libs/*.jar
+            fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
+            neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
+            fabric/build/libs/*-@(dev|sources|javadocs).jar
+            neoforge/build/libs/*-@(dev|sources|javadocs).jar
           loaders: |
             fabric
             neoforge
           game-versions: |
             [1.21.6,1.22)
           dependencies: |
-            fabric-api{modrinth:P7dR8mSH}
             architectury-api{modrinth:lhGA9TYQ}
             midnightlib{modrinth:codAaoxh}
             modmenu(optional)
