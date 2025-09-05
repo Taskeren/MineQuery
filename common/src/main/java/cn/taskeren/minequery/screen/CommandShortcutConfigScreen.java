@@ -72,9 +72,9 @@ public class CommandShortcutConfigScreen extends Screen {
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if(this.selectedKeyBinding != null) {
 			if(keyCode == InputUtil.GLFW_KEY_ESCAPE) {
-				GAME_OPTIONS.setKeyCode(this.selectedKeyBinding, InputUtil.UNKNOWN_KEY);
+                this.selectedKeyBinding.setBoundKey(InputUtil.UNKNOWN_KEY);
 			} else {
-				GAME_OPTIONS.setKeyCode(this.selectedKeyBinding, InputUtil.fromKeyCode(keyCode, scanCode));
+                this.selectedKeyBinding.setBoundKey(InputUtil.fromKeyCode(keyCode, scanCode));
 			}
 
 			this.selectedKeyBinding = null;

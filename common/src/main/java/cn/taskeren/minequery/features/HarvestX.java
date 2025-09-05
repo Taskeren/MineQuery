@@ -4,19 +4,33 @@ import cn.taskeren.minequery.api.ClientBlockEvent;
 import cn.taskeren.minequery.utils.BlockUtils;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.InteractionEvent;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CactusBlock;
+import net.minecraft.block.CropBlock;
+import net.minecraft.block.NetherWartBlock;
+import net.minecraft.block.StemBlock;
+import net.minecraft.block.SugarCaneBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
-import static cn.taskeren.minequery.config.MineQueryConfig.*;
+import static cn.taskeren.minequery.config.MineQueryConfig.enableHarvestX;
+import static cn.taskeren.minequery.config.MineQueryConfig.harvestX_handleCactus;
+import static cn.taskeren.minequery.config.MineQueryConfig.harvestX_handleCrops;
+import static cn.taskeren.minequery.config.MineQueryConfig.harvestX_handleNetherWart;
+import static cn.taskeren.minequery.config.MineQueryConfig.harvestX_handleSneaking;
+import static cn.taskeren.minequery.config.MineQueryConfig.harvestX_handleStems;
+import static cn.taskeren.minequery.config.MineQueryConfig.harvestX_handleSugarCane;
+import static cn.taskeren.minequery.config.MineQueryConfig.harvestX_useRightHarvest;
 
 /**
  * Feature: Harvest X
@@ -46,17 +60,17 @@ public class HarvestX {
 		InteractionEvent.RIGHT_CLICK_BLOCK.register(HarvestX::handleInteract);
 	}
 
-	private static EventResult handleBreak(PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+	private static ActionResult handleBreak(PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
 		var world = player.getWorld();
 		var state = world.getBlockState(pos);
 		var type = state.getBlock();
 
 		if(!enableHarvestX) {
-			return EventResult.pass();
+			return ActionResult.PASS;
 		}
 
 		if(player.isSneaking() && !harvestX_handleSneaking) {
-			return EventResult.pass();
+			return ActionResult.PASS;
 		}
 
 		if(!harvestX_useRightHarvest) {
@@ -64,37 +78,37 @@ public class HarvestX {
 				var age = cropBlock.getAge(state);
 				var maxAge = cropBlock.getMaxAge();
 				if(age < maxAge) {
-					return EventResult.interruptFalse();
+					return ActionResult.FAIL;
 				}
 			}
 
 			if(type instanceof NetherWartBlock && harvestX_handleNetherWart) {
 				var age = state.get(NetherWartBlock.AGE);
 				if(age < NetherWartBlock.MAX_AGE) {
-					return EventResult.interruptFalse();
+					return ActionResult.FAIL;
 				}
 			}
 		}
 
 		if(type instanceof StemBlock && harvestX_handleStems) {
-			return EventResult.interruptFalse();
+			return ActionResult.FAIL;
 		}
 
 		if(type instanceof CactusBlock && harvestX_handleCactus) {
 			var blockBelow = world.getBlockState(pos.down());
 			if(blockBelow.getBlock() != Blocks.CACTUS) {
-				return EventResult.interruptFalse();
+				return ActionResult.FAIL;
 			}
 		}
 
 		if(type instanceof SugarCaneBlock && harvestX_handleSugarCane) {
 			var blockBelow = world.getBlockState(pos.down());
 			if(blockBelow.getBlock() != Blocks.SUGAR_CANE) {
-				return EventResult.interruptFalse();
+				return ActionResult.FAIL;
 			}
 		}
 
-		return EventResult.pass();
+		return ActionResult.PASS;
 	}
 
 	private static void placeAndSwingHand(BlockPos pos) {
@@ -151,9 +165,9 @@ public class HarvestX {
 		}
 	}
 
-	private static EventResult handleInteract(PlayerEntity player, Hand hand, BlockPos pos, Direction direction) {
+	private static ActionResult handleInteract(PlayerEntity player, Hand hand, BlockPos pos, Direction direction) {
 		if(!enableHarvestX) {
-			return EventResult.pass();
+			return ActionResult.PASS;
 		}
 
 		var world = player.getWorld();
@@ -177,7 +191,7 @@ public class HarvestX {
 			}
 		}
 
-		return EventResult.pass();
+		return ActionResult.PASS;
 	}
 
 }

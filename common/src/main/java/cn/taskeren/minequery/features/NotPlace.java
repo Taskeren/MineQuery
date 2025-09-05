@@ -1,6 +1,5 @@
 package cn.taskeren.minequery.features;
 
-import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientTooltipEvent;
 import dev.architectury.event.events.common.InteractionEvent;
 import net.minecraft.client.MinecraftClient;
@@ -12,6 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -72,9 +72,9 @@ public class NotPlace {
 		}
 	}
 
-	private static EventResult onRightClick(PlayerEntity player, Hand hand, BlockPos pos, Direction direction) {
+	private static ActionResult onRightClick(PlayerEntity player, Hand hand, BlockPos pos, Direction direction) {
 		if(!enableNotPlace) {
-			return EventResult.pass();
+			return ActionResult.PASS;
 		}
 
 		var item = player.getStackInHand(hand);
@@ -84,15 +84,15 @@ public class NotPlace {
 					"minequery.tooltip.not_place.updated",
 					getDirectionLocalizedName(direction).formatted(Formatting.YELLOW),
 					getDirectionStateColoredLocalizedText(direction, true)
-			));
-			return EventResult.interruptFalse();
+			), false);
+			return ActionResult.FAIL;
 		}
 
 		if(item.getItem() instanceof BlockItem && !canPlaceAt(direction)) {
-			return EventResult.interruptFalse();
+			return ActionResult.FAIL;
 		}
 
-		return EventResult.pass();
+		return ActionResult.PASS;
 	}
 
 
