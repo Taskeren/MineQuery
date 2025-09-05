@@ -77,3 +77,11 @@ subprojects {
         }
     }
 }
+
+tasks.register("copyOutput", Copy) {
+    dependsOn(":fabric:remapJar", ":neoforge:remapJar")
+
+    from(project(":fabric").tasks.named("remapJar").map { it.archiveFile })
+    from(project(":neoforge").tasks.named("remapJar").map { it.archiveFile })
+    into(layout.buildDirectory.dir("libs"))
+}

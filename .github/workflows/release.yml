@@ -39,7 +39,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build the mod
-        run: ./gradlew --build-cache --info --stacktrace -Pmod_version='${{ env.VERSION }}' assemble
+        run: ./gradlew --build-cache --info --stacktrace -Pmod_version='${{ env.VERSION }}' assemble copyOutput
 
       - name: Publish to CurseForge and Modrinth
         uses: Kir-Antipov/mc-publish@v3.3.0
@@ -50,10 +50,7 @@ jobs:
           # curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
-            neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
-            fabric/build/libs/*-@(dev|sources|javadocs).jar
-            neoforge/build/libs/*-@(dev|sources|javadocs).jar
+            build/libs/*.jar
           loaders: |
             fabric
             neoforge
