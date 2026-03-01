@@ -14,6 +14,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -69,19 +70,19 @@ public class CommandShortcutConfigScreen extends Screen {
 	}
 
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+	public boolean keyPressed(KeyInput input) {
 		if(this.selectedKeyBinding != null) {
-			if(keyCode == InputUtil.GLFW_KEY_ESCAPE) {
-                this.selectedKeyBinding.setBoundKey(InputUtil.UNKNOWN_KEY);
+			if(input.getKeycode() == InputUtil.GLFW_KEY_ESCAPE) {
+				this.selectedKeyBinding.setBoundKey(InputUtil.UNKNOWN_KEY);
 			} else {
-                this.selectedKeyBinding.setBoundKey(InputUtil.fromKeyCode(keyCode, scanCode));
+				this.selectedKeyBinding.setBoundKey(InputUtil.fromKeyCode(input));
 			}
 
 			this.selectedKeyBinding = null;
 			this.list.update();
 			return true;
 		} else {
-			return super.keyPressed(keyCode, scanCode, modifiers);
+			return super.keyPressed(input);
 		}
 	}
 
@@ -116,11 +117,6 @@ public class CommandShortcutConfigScreen extends Screen {
 		@Override
 		public int getRowWidth() {
 			return this.width / 2;
-		}
-
-		@Override
-		protected void renderEntry(DrawContext context, int mouseX, int mouseY, float delta, int index, int x, int y, int entryWidth, int entryHeight) {
-			super.renderEntry(context, mouseX, mouseY, delta, index, x, y, entryWidth, entryHeight);
 		}
 
 		private class CommandShortcutEntry extends ElementListWidget.Entry<CommandShortcutEntry> {
@@ -181,23 +177,23 @@ public class CommandShortcutConfigScreen extends Screen {
 			}
 
 			@Override
-			public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-				var consumableX = x;
+			public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+				var consumableX = getX();
 
 				this.textField.setX(consumableX);
-				this.textField.setY(y);
-				this.textField.setWidth(entryWidth / 3 * 2);
-				this.textField.render(context, mouseX, mouseY, tickDelta);
-				consumableX += entryWidth / 3 * 2 + LIST_ITEM_GAP;
+				this.textField.setY(getY());
+				this.textField.setWidth(getWidth() / 3 * 2);
+				this.textField.render(context, mouseX, mouseY, deltaTicks);
+				consumableX += getWidth() / 3 * 2 + LIST_ITEM_GAP;
 
 				this.saveButton.setX(consumableX);
-				this.saveButton.setY(y);
-				this.saveButton.render(context, mouseX, mouseY, tickDelta);
+				this.saveButton.setY(getY());
+				this.saveButton.render(context, mouseX, mouseY, deltaTicks);
 				consumableX += LIST_BUTTON_WIDTH + LIST_ITEM_GAP;
 
 				this.keyButton.setX(consumableX);
-				this.keyButton.setY(y);
-				this.keyButton.render(context, mouseX, mouseY, tickDelta);
+				this.keyButton.setY(getY());
+				this.keyButton.render(context, mouseX, mouseY, deltaTicks);
 			}
 
 			void update() {
@@ -212,7 +208,7 @@ public class CommandShortcutConfigScreen extends Screen {
 								duplicateInfo.append(", ");
 							}
 							duplicate = true;
-							duplicateInfo.append(Text.translatable(keyBinding.getTranslationKey()));
+							duplicateInfo.append(Text.translatable(keyBinding.getId()));
 						}
 					}
 				}

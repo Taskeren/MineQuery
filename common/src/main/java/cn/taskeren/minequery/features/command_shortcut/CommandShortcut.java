@@ -1,6 +1,7 @@
 package cn.taskeren.minequery.features.command_shortcut;
 
 import cn.taskeren.minequery.config.MineQueryConfig;
+import cn.taskeren.minequery.features.KeyBindings;
 import cn.taskeren.minequery.screen.CommandShortcutConfigScreen;
 import cn.taskeren.minequery.utils.ScreenUtils;
 import dev.architectury.event.events.client.ClientTickEvent;
@@ -17,7 +18,7 @@ public class CommandShortcut {
 
 	public static final int SIZE = MineQueryConfig.commandShortcutSize;
 
-	private static final KeyBinding KB_OPEN_EDIT_SCREEN = new KeyBinding("key.minequery.command_shortcut.open_edit_screen", InputUtil.GLFW_KEY_J, "category.minequery");
+	private static final KeyBinding KB_OPEN_EDIT_SCREEN = new KeyBinding("key.minequery.command_shortcut.open_edit_screen", InputUtil.GLFW_KEY_J, KeyBindings.KB_CATEGORY);
 
 	private static final CommandShortcutHandle[] HANDLES = new CommandShortcutHandle[SIZE];
 
@@ -27,7 +28,7 @@ public class CommandShortcut {
 		KeyMappingRegistry.register(KB_OPEN_EDIT_SCREEN);
 
 		for(int i = 0; i < SIZE; i++) {
-			var kb = new KeyBinding("key.minequery.command_shortcut."+i, -1, "category.minequery");
+			var kb = new KeyBinding("key.minequery.command_shortcut."+i, -1, KeyBindings.KB_CATEGORY);
 			HANDLES[i] = CommandShortcutHandle.of(i, kb);
 			KeyMappingRegistry.register(kb);
 		}

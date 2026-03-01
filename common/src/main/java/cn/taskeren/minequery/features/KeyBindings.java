@@ -1,5 +1,6 @@
 package cn.taskeren.minequery.features;
 
+import cn.taskeren.minequery.MineQuery;
 import cn.taskeren.minequery.utils.ScreenUtils;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
@@ -10,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 
 import java.util.HashSet;
@@ -19,8 +21,10 @@ import static cn.taskeren.minequery.config.MineQueryConfig.feedEmDiameter;
 
 public class KeyBindings {
 
-	public static final KeyBinding KB_OPEN_CONFIG = new KeyBinding("key.minequery.open_config", InputUtil.GLFW_KEY_G, "category.minequery");
-	public static final KeyBinding KB_FEED_EM = new KeyBinding("key.minequery.feed_em", -1, "category.minequery");
+	public static final KeyBinding.Category KB_CATEGORY = KeyBinding.Category.create(Identifier.of(MineQuery.MOD_ID, "general"));
+
+	public static final KeyBinding KB_OPEN_CONFIG = new KeyBinding("key.minequery.open_config", InputUtil.GLFW_KEY_G, KB_CATEGORY);
+	public static final KeyBinding KB_FEED_EM = new KeyBinding("key.minequery.feed_em", -1, KB_CATEGORY);
 
 	public static void init() {
 		ClientTickEvent.CLIENT_POST.register(KeyBindings::handle);
@@ -50,7 +54,7 @@ public class KeyBindings {
 
 		world.getEntitiesByClass(
 				AnimalEntity.class,
-				Box.of(player.getPos(), feedEmDiameter, feedEmDiameter, feedEmDiameter),
+				Box.of(player.getEntityPos(), feedEmDiameter, feedEmDiameter, feedEmDiameter),
 				(e) -> !e.isBaby()
 		).forEach(e -> {
 			if(!FED_ENTITIES.contains(e)) {

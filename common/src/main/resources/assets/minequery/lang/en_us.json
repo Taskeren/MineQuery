@@ -20,7 +20,7 @@
   "minequery.midnightconfig.enum.AllowAttackIronGolem.VILLAGE_SPAWNED": "Village Spawned",
   "minequery.midnightconfig.enum.AllowAttackIronGolem.PLAYER_BUILT": "Player Built",
   "minequery.midnightconfig.enum.AllowAttackIronGolem.ALL": "All",
-  "category.minequery": "MineQuery",
+  "key.category.minequery.general": "MineQuery",
   "key.minequery.open_config": "Open Config",
   "key.minequery.feed_em": "Feed 'em",
   "key.minequery.command_shortcut": "Command Shortcut",

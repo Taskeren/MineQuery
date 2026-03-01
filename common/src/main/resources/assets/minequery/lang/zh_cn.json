@@ -20,7 +20,7 @@
   "minequery.midnightconfig.enum.AllowAttackIronGolem.VILLAGE_SPAWNED": "自然生成",
   "minequery.midnightconfig.enum.AllowAttackIronGolem.PLAYER_BUILT": "玩家制作",
   "minequery.midnightconfig.enum.AllowAttackIronGolem.ALL": "所有",
-  "category.minequery": "MineQuery",
+  "key.category.minequery.general": "MineQuery",
   "key.minequery.open_config": "打开配置",
   "key.minequery.feed_em": "喂它！",
   "key.minequery.command_shortcut": "快捷指令",

@@ -61,49 +61,49 @@ public class HarvestX {
 	}
 
 	private static ActionResult handleBreak(PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
-		var world = player.getWorld();
+		var world = player.getEntityWorld();
 		var state = world.getBlockState(pos);
 		var type = state.getBlock();
 
-		if(!enableHarvestX) {
+		if (!enableHarvestX) {
 			return ActionResult.PASS;
 		}
 
-		if(player.isSneaking() && !harvestX_handleSneaking) {
+		if (player.isSneaking() && !harvestX_handleSneaking) {
 			return ActionResult.PASS;
 		}
 
-		if(!harvestX_useRightHarvest) {
-			if(type instanceof CropBlock cropBlock && harvestX_handleCrops) {
+		if (!harvestX_useRightHarvest) {
+			if (type instanceof CropBlock cropBlock && harvestX_handleCrops) {
 				var age = cropBlock.getAge(state);
 				var maxAge = cropBlock.getMaxAge();
-				if(age < maxAge) {
+				if (age < maxAge) {
 					return ActionResult.FAIL;
 				}
 			}
 
-			if(type instanceof NetherWartBlock && harvestX_handleNetherWart) {
+			if (type instanceof NetherWartBlock && harvestX_handleNetherWart) {
 				var age = state.get(NetherWartBlock.AGE);
-				if(age < NetherWartBlock.MAX_AGE) {
+				if (age < NetherWartBlock.MAX_AGE) {
 					return ActionResult.FAIL;
 				}
 			}
 		}
 
-		if(type instanceof StemBlock && harvestX_handleStems) {
+		if (type instanceof StemBlock && harvestX_handleStems) {
 			return ActionResult.FAIL;
 		}
 
-		if(type instanceof CactusBlock && harvestX_handleCactus) {
+		if (type instanceof CactusBlock && harvestX_handleCactus) {
 			var blockBelow = world.getBlockState(pos.down());
-			if(blockBelow.getBlock() != Blocks.CACTUS) {
+			if (blockBelow.getBlock() != Blocks.CACTUS) {
 				return ActionResult.FAIL;
 			}
 		}
 
-		if(type instanceof SugarCaneBlock && harvestX_handleSugarCane) {
+		if (type instanceof SugarCaneBlock && harvestX_handleSugarCane) {
 			var blockBelow = world.getBlockState(pos.down());
-			if(blockBelow.getBlock() != Blocks.SUGAR_CANE) {
+			if (blockBelow.getBlock() != Blocks.SUGAR_CANE) {
 				return ActionResult.FAIL;
 			}
 		}
@@ -115,7 +115,7 @@ public class HarvestX {
 		var minecraft = MinecraftClient.getInstance();
 		var player = minecraft.player;
 
-		if(player == null) {
+		if (player == null) {
 			throw new IllegalStateException(new NullPointerException("player"));
 		}
 
@@ -132,19 +132,19 @@ public class HarvestX {
 	}
 
 	private static EventResult handleBlockBreak(ClientWorld world, ClientPlayerEntity player, BlockPos pos, BlockState blockState) {
-		if(!enableHarvestX) {
+		if (!enableHarvestX) {
 			return EventResult.pass();
 		}
 
-		if(player.isSneaking() && !harvestX_handleSneaking) {
+		if (player.isSneaking() && !harvestX_handleSneaking) {
 			return EventResult.pass();
 		}
 
 		var blockType = blockState.getBlock();
 
 		// only works in "left-clicking mode"
-		if(!harvestX_useRightHarvest && (blockType instanceof CropBlock || blockType instanceof NetherWartBlock)) {
-			if(BlockUtils.canPlaceAt(blockType, blockState, world, pos)) {
+		if (!harvestX_useRightHarvest && (blockType instanceof CropBlock || blockType instanceof NetherWartBlock)) {
+			if (BlockUtils.canPlaceAt(blockType, blockState, world, pos)) {
 				placeAndSwingHand(pos);
 			}
 		}
@@ -157,40 +157,37 @@ public class HarvestX {
 		var interactionManager = minecraft.interactionManager;
 		var player = minecraft.player;
 
-		if(interactionManager != null) {
+		if (interactionManager != null) {
 			interactionManager.attackBlock(pos, side);
-			if(player != null) {
+			if (player != null) {
 				player.swingHand(Hand.MAIN_HAND);
 			}
 		}
 	}
 
 	private static ActionResult handleInteract(PlayerEntity player, Hand hand, BlockPos pos, Direction direction) {
-		if(!enableHarvestX) {
-			return ActionResult.PASS;
-		}
+		if (enableHarvestX) {
+			var world = player.getEntityWorld();
+			var state = world.getBlockState(pos);
+			var type = state.getBlock();
 
-		var world = player.getWorld();
-		var state = world.getBlockState(pos);
-		var type = state.getBlock();
-
-		if(harvestX_useRightHarvest) {
-			if(type instanceof CropBlock cropBlock && harvestX_handleCrops) {
-				var age = cropBlock.getAge(state);
-				var maxAge = cropBlock.getMaxAge();
-				if(age >= maxAge) {
-					breakBlockAndSwingHand(pos, direction);
+			if (harvestX_useRightHarvest) {
+				if (type instanceof CropBlock cropBlock && harvestX_handleCrops) {
+					var age = cropBlock.getAge(state);
+					var maxAge = cropBlock.getMaxAge();
+					if (age >= maxAge) {
+						breakBlockAndSwingHand(pos, direction);
+					}
 				}
-			}
 
-			if(type instanceof NetherWartBlock && harvestX_handleNetherWart) {
-				var age = state.get(NetherWartBlock.AGE);
-				if(age >= NetherWartBlock.MAX_AGE) {
-					breakBlockAndSwingHand(pos, direction);
+				if (type instanceof NetherWartBlock && harvestX_handleNetherWart) {
+					var age = state.get(NetherWartBlock.AGE);
+					if (age >= NetherWartBlock.MAX_AGE) {
+						breakBlockAndSwingHand(pos, direction);
+					}
 				}
 			}
 		}
-
 		return ActionResult.PASS;
 	}
 
